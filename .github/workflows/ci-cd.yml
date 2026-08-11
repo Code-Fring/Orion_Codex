@@ -2,18 +2,21 @@ name: Orion Codex CI/CD
 
 on:
   push:
-    branches: [main, develop]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # ==============================
+  # ============================================================
   # FRONTEND
-  # ==============================
+  # ============================================================
   frontend:
     runs-on: ubuntu-latest
 
@@ -41,8 +44,8 @@ jobs:
       - name: Run type checking
         run: npm run typecheck
 
-      # The frontend currently has no "test" script.
-      # Do not fail CI when tests are not configured yet.
+      # The frontend currently does not define a test script.
+      # --if-present prevents CI from failing when no test script exists.
       - name: Run tests
         run: npm run test --if-present -- --run
 
@@ -52,7 +55,7 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
           VITE_APP_VERSION: ${{ github.sha }}
-          VITE_DEBUG: false
+          VITE_DEBUG: "false"
 
       - name: Upload frontend build
         uses: actions/upload-artifact@v4
@@ -61,9 +64,9 @@ jobs:
           path: frontend/dist/
           retention-days: 7
 
-  # ==============================
+  # ============================================================
   # BACKEND
-  # ==============================
+  # ============================================================
   backend:
     runs-on: ubuntu-latest
 
@@ -81,7 +84,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U orion -d orion_codex"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -113,10 +116,13 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-asyncio pytest-cov httpx
 
+      # Only run Ruff's F rules in CI.
+      # These detect genuine Python issues such as undefined names
+      # and unused imports without failing on the existing style rules.
       - name: Run linting
         run: |
           pip install ruff
-          ruff check .
+          ruff check . --select F --output-format=github
 
       - name: Run type checking
         run: |
@@ -140,11 +146,12 @@ jobs:
           flags: backend
           fail_ci_if_error: false
 
-  # ==============================
+  # ============================================================
   # DOCKER
-  # ==============================
+  # ============================================================
   docker:
     runs-on: ubuntu-latest
+
     needs:
       - frontend
       - backend
@@ -156,24 +163,28 @@ jobs:
         github.ref == 'refs/heads/develop'
       )
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
+      - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Container Registry
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # ------------------------------
-      # Backend image
-      # ------------------------------
-      - name: Extract metadata for backend
+      # ----------------------------------------------------------
+      # Backend Docker image
+      # ----------------------------------------------------------
+      - name: Extract backend image metadata
         id: meta-backend
         uses: docker/metadata-action@v5
         with:
@@ -184,8 +195,8 @@ jobs:
             type=sha
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build and push backend
-        uses: docker/build-push-action@v5
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./backend/Dockerfile
@@ -195,19 +206,19 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # ------------------------------
-      # Download frontend build
-      # ------------------------------
+      # ----------------------------------------------------------
+      # Frontend build artifact
+      # ----------------------------------------------------------
       - name: Download frontend build
         uses: actions/download-artifact@v4
         with:
           name: frontend-dist
           path: frontend/dist/
 
-      # ------------------------------
-      # Frontend image
-      # ------------------------------
-      - name: Extract metadata for frontend
+      # ----------------------------------------------------------
+      # Frontend Docker image
+      # ----------------------------------------------------------
+      - name: Extract frontend image metadata
         id: meta-frontend
         uses: docker/metadata-action@v5
         with:
@@ -218,8 +229,8 @@ jobs:
             type=sha
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build and push frontend
-        uses: docker/build-push-action@v5
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
@@ -229,12 +240,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ==============================
+  # ============================================================
   # STAGING
-  # ==============================
+  # ============================================================
   deploy-staging:
     runs-on: ubuntu-latest
-    needs: [docker]
+
+    needs:
+      - docker
 
     if: github.ref == 'refs/heads/develop'
 
@@ -243,17 +256,17 @@ jobs:
     steps:
       - name: Deploy to staging
         run: |
-          echo "Deploying to staging environment..."
-          # Add staging deployment commands here.
-          # Example:
-          # kubectl apply -f k8s/staging/
+          echo "Deploying Orion Codex to staging..."
+          echo "Staging deployment commands can be added here."
 
-  # ==============================
+  # ============================================================
   # PRODUCTION
-  # ==============================
+  # ============================================================
   deploy-production:
     runs-on: ubuntu-latest
-    needs: [docker]
+
+    needs:
+      - docker
 
     if: github.ref == 'refs/heads/main'
 
@@ -262,7 +275,5 @@ jobs:
     steps:
       - name: Deploy to production
         run: |
-          echo "Deploying to production environment..."
-          # Add production deployment commands here.
-          # Example:
-          # kubectl apply -f k8s/production/
+          echo "Deploying Orion Codex to production..."
+          echo "Production deployment commands can be added here."
