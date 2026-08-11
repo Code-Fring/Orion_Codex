@@ -1,0 +1,26 @@
+{
+  "name": "openrouter_provider",
+  "version": "1.0.0",
+  "author": "Orion Codex",
+  "description": "OpenRouter AI provider plugin for accessing multiple models",
+  "license": "MIT",
+  "homepage": "https://github.com/orion-codex/plugins",
+  "repository": "https://github.com/orion-codex/plugins",
+  "plugin_type": "ai_provider",
+  "entry_point": "main.py",
+  "min_orion_version": "0.1.0",
+  "supported_platforms": ["win32", "linux", "darwin"],
+  "dependencies": [],
+  "permissions": ["providers:use", "network:http"],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "api_key": {"type": "string", "description": "OpenRouter API key"},
+      "base_url": {"type": "string", "description": "OpenRouter base URL", "default": "https://openrouter.ai/api/v1"},
+      "default_model": {"type": "string", "description": "Default model to use", "default": "openrouter/auto"}
+    },
+    "required": ["api_key"]
+  },
+  "provides": ["openrouter"],
+  "tags": ["ai", "provider", "openrouter", "llm"]
+}

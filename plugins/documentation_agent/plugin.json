@@ -1,0 +1,26 @@
+{
+  "name": "documentation_agent",
+  "version": "1.0.0",
+  "author": "Orion Codex",
+  "description": "Documentation generation agent plugin",
+  "license": "MIT",
+  "homepage": "https://github.com/orion-codex/plugins",
+  "repository": "https://github.com/orion-codex/plugins",
+  "plugin_type": "agent",
+  "entry_point": "main.py",
+  "min_orion_version": "0.1.0",
+  "supported_platforms": ["win32", "linux", "darwin"],
+  "dependencies": [],
+  "permissions": ["filesystem:read", "filesystem:write", "agents:execute"],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "output_format": {"type": "string", "enum": ["markdown", "html", "pdf"], "default": "markdown"},
+      "include_private": {"type": "boolean", "description": "Include private methods/classes", "default": false},
+      "generate_readme": {"type": "boolean", "description": "Generate README.md", "default": true},
+      "generate_api_docs": {"type": "boolean", "description": "Generate API documentation", "default": true}
+    }
+  },
+  "provides": ["documentation_generator"],
+  "tags": ["agent", "documentation", "docs", "readme", "api-docs"]
+}

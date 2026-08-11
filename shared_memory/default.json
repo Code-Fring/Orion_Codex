@@ -1,0 +1,42 @@
+{
+  "project_id": "default",
+  "workspace_path": "C:\\Users\\ABHINAV SHANKAR\\OneDrive\\Desktop\\OrionCodex",
+  "analysis": null,
+  "plan": null,
+  "architecture": null,
+  "architecture_review": null,
+  "generated_files": [],
+  "file_contents": {},
+  "file_hashes": {},
+  "test_results": [],
+  "test_coverage": {},
+  "code_reviews": [],
+  "review_summary": null,
+  "security_findings": [],
+  "security_report": null,
+  "dependencies": {},
+  "dependency_vulnerabilities": [],
+  "outdated_packages": [],
+  "bugs_found": [],
+  "fixes_applied": [],
+  "git_commits": [],
+  "git_branches": [],
+  "git_status": null,
+  "deployment_configs": [],
+  "deployment_artifacts": [],
+  "current_tasks": {
+    "task_1_1786113093": {
+      "description": "Test task",
+      "created_at": "2026-08-07T20:01:33.118613"
+    }
+  },
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "agent_outputs": {},
+  "conventions": {},
+  "known_issues": [],
+  "open_issues": [],
+  "created_at": "2026-08-07T14:24:38.937027",
+  "updated_at": "2026-08-07T14:31:33.118624",
+  "version": 3
+}

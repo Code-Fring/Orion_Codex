@@ -1,0 +1,24 @@
+{
+  "name": "docker_tool",
+  "version": "1.0.0",
+  "author": "Orion Codex",
+  "description": "Docker management tool plugin",
+  "license": "MIT",
+  "homepage": "https://github.com/orion-codex/plugins",
+  "repository": "https://github.com/orion-codex/plugins",
+  "plugin_type": "tool",
+  "entry_point": "main.py",
+  "min_orion_version": "0.1.0",
+  "supported_platforms": ["win32", "linux", "darwin"],
+  "dependencies": [],
+  "permissions": ["terminal:execute", "network:http"],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "docker_host": {"type": "string", "description": "Docker host", "default": "unix:///var/run/docker.sock"},
+      "timeout": {"type": "integer", "description": "API timeout in seconds", "default": 60}
+    }
+  },
+  "provides": ["docker"],
+  "tags": ["tool", "docker", "container", "devops"]
+}

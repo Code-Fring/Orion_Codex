@@ -1,0 +1,28 @@
+{
+  "name": "security_agent",
+  "version": "1.0.0",
+  "author": "Orion Codex",
+  "description": "Security analysis agent plugin",
+  "license": "MIT",
+  "homepage": "https://github.com/orion-codex/plugins",
+  "repository": "https://github.com/orion-codex/plugins",
+  "plugin_type": "agent",
+  "entry_point": "main.py",
+  "min_orion_version": "0.1.0",
+  "supported_platforms": ["win32", "linux", "darwin"],
+  "dependencies": [],
+  "permissions": ["filesystem:read", "agents:execute", "terminal:execute"],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "deep_scan": {"type": "boolean", "description": "Enable deep security scan", "default": false},
+      "scan_types": {
+        "type": "array",
+        "items": {"type": "string", "enum": ["sast", "secrets", "dependencies", "config"]},
+        "description": "Types of scans to run"
+      }
+    }
+  },
+  "provides": ["security_analyzer"],
+  "tags": ["agent", "security", "scan", "vulnerability", "sast"]
+}

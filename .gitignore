@@ -1,0 +1,15 @@
+@"
+node_modules/
+.env
+.env.*
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+build/
+*.log
+*.db
+memory/*/conversation.json
+workspace/*/
+"@ | Set-Content .gitignore

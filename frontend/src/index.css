@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+  }
+
+  * {
+    @apply border-slate-800;
+  }
+
+  body {
+    @apply bg-slate-950 text-white antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.slate.700') transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: theme('colors.slate.700');
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: theme('colors.slate.600');
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-in {
+    animation: animate-in 0.2s ease-out;
+  }
+
+  @keyframes animate-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-out {
+    animation: animate-out 0.15s ease-in;
+  }
+
+  @keyframes animate-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-950;
+}
+
+/* Selection styles */
+::selection {
+  @apply bg-blue-500/30 text-white;
+}
+
+/* Placeholder styles */
+::placeholder {
+  @apply text-slate-500;
+}
+
+/* Input styles */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply bg-slate-800 animate-pulse rounded;
+}
+
+/* Code block styles */
+pre {
+  @apply bg-slate-950 border border-slate-800 rounded-lg p-4 overflow-x-auto text-sm text-slate-300;
+}
+
+code {
+  @apply font-mono text-sm;
+}
+
+pre code {
+  @apply p-0 bg-transparent text-inherit;
+}
+
+/* Markdown styles */
+.prose {
+  @apply text-slate-300;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  @apply text-white font-semibold;
+}
+
+.prose a {
+  @apply text-blue-400 hover:text-blue-300 underline;
+}
+
+.prose code {
+  @apply bg-slate-800 px-1.5 py-0.5 rounded text-blue-400;
+}
+
+.prose pre {
+  @apply bg-slate-950 border border-slate-800;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-slate-300;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-blue-500 pl-4 italic text-slate-400;
+}
+
+.prose ul, .prose ol {
+  @apply pl-6;
+}
+
+.prose li {
+  @apply mb-1;
+}
+
+.prose table {
+  @apply w-full border-collapse;
+}
+
+.prose th, .prose td {
+  @apply border border-slate-700 px-4 py-2 text-left;
+}
+
+.prose th {
+  @apply bg-slate-800 font-semibold;
+}
+
+/* Toast customizations */
+.toast-container {
+  @apply z-50;
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-40;
+}
+
+/* Transition classes */
+.transition-all-200 {
+  @apply transition-all duration-200 ease-out;
+}
+
+.transition-colors-150 {
+  @apply transition-colors duration-150 ease-out;
+}
+
+/* Grid utilities */
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Aspect ratio utilities */
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}

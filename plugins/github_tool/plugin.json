@@ -1,0 +1,25 @@
+{
+  "name": "github_tool",
+  "version": "1.0.0",
+  "author": "Orion Codex",
+  "description": "GitHub API tool plugin for repository management",
+  "license": "MIT",
+  "homepage": "https://github.com/orion-codex/plugins",
+  "repository": "https://github.com/orion-codex/plugins",
+  "plugin_type": "tool",
+  "entry_point": "main.py",
+  "min_orion_version": "0.1.0",
+  "supported_platforms": ["win32", "linux", "darwin"],
+  "dependencies": [],
+  "permissions": ["network:http", "git:read", "git:write"],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "token": {"type": "string", "description": "GitHub personal access token"},
+      "base_url": {"type": "string", "description": "GitHub API base URL", "default": "https://api.github.com"}
+    },
+    "required": ["token"]
+  },
+  "provides": ["github"],
+  "tags": ["tool", "github", "git", "api", "repository"]
+}

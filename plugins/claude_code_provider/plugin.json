@@ -1,0 +1,24 @@
+{
+  "name": "claude_code_provider",
+  "version": "1.0.0",
+  "author": "Orion Codex",
+  "description": "Claude Code CLI provider plugin",
+  "license": "MIT",
+  "homepage": "https://github.com/orion-codex/plugins",
+  "repository": "https://github.com/orion-codex/plugins",
+  "plugin_type": "ai_provider",
+  "entry_point": "main.py",
+  "min_orion_version": "0.1.0",
+  "supported_platforms": ["win32", "linux", "darwin"],
+  "dependencies": [],
+  "permissions": ["providers:use", "terminal:execute", "filesystem:read", "filesystem:write"],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "claude_path": {"type": "string", "description": "Path to claude CLI", "default": "claude"},
+      "workspace_path": {"type": "string", "description": "Workspace path for Claude Code"}
+    }
+  },
+  "provides": ["claude_code"],
+  "tags": ["ai", "provider", "claude", "anthropic", "cli"]
+}

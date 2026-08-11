@@ -1,0 +1,43 @@
+#!/bin/bash
+# Orion Codex - Linux/macOS launcher
+# This file should be placed in a directory in your PATH (e.g., /usr/local/bin)
+
+set -e
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKEND_PATH="$SCRIPT_DIR/backend"
+
+# If backend not found next to script, try to find it in common locations
+if [ ! -d "$BACKEND_PATH" ]; then
+    # Check pip package installation
+    for site_dir in $(python3 -m site --user-site 2>/dev/null; python3 -m site 2>/dev/null | grep -E '^/.*site-packages$'); do
+        if [ -d "$site_dir/orion_codex/backend" ]; then
+            BACKEND_PATH="$site_dir/orion_codex/backend"
+            break
+        fi
+    done
+fi
+
+# If still not found, try to find via Python
+if [ ! -d "$BACKEND_PATH" ]; then
+    BACKEND_PATH=$(python3 -c "
+import sys
+import site
+for p in sys.path:
+    backend = os.path.join(p, 'orion_codex', 'backend')
+    if os.path.isdir(backend):
+        print(backend)
+        break
+" 2>/dev/null || echo "")
+fi
+
+if [ ! -d "$BACKEND_PATH" ]; then
+    echo "Error: Could not find Orion Codex backend" >&2
+    echo "Searched: $BACKEND_PATH" >&2
+    exit 1
+fi
+
+# Add backend to Python path and run
+export PYTHONPATH="$BACKEND_PATH:$PYTHONPATH"
+exec python3 -m backend.cli.main "$@"
