@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 import toml
+
 from backend.agents.base import AgentContext, AgentResult, BaseAgent
 from backend.core.model_manager import AgentRole, model_manager
 from backend.core.providers.interfaces import ChatMessage

@@ -4,10 +4,6 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from backend.core.providers.factory import ProviderFactory
-from backend.core.providers.interfaces import ChatMessage
-from backend.core.providers.registry import provider_registry
-from backend.memory.store import memory_store
 from rich.markdown import Markdown
 from textual import events
 from textual.app import App, ComposeResult
@@ -27,6 +23,11 @@ from textual.widgets import (
     TabPane,
     Tree,
 )
+
+from backend.core.providers.factory import ProviderFactory
+from backend.core.providers.interfaces import ChatMessage
+from backend.core.providers.registry import provider_registry
+from backend.memory.store import memory_store
 
 
 class ChatMessageWidget(Static):

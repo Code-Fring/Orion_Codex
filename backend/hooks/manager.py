@@ -2,9 +2,10 @@
 
 import asyncio
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -177,7 +178,7 @@ class HookManager:
 
     def add_global_after_hook(self, handler: Callable[[HookContext], Any]) -> None:
         """Add a global after hook."""
-        self._global_after_hooks.append(hook)
+        self._global_after_hooks.append(handler)
 
     def get_hooks_for_point(self, hook_point: HookPoint) -> list[HookRegistration]:
         """Get all hooks for a hook point."""
@@ -189,7 +190,11 @@ hook_manager = HookManager()
 
 
 # Convenience functions
-async def run_before_hooks(hook_point: HookPoint, data: dict[str, Any] | None = None, metadata: dict[str, Any] | None = None) -> HookContext:
+async def run_before_hooks(
+    hook_point: HookPoint,
+    data: dict[str, Any] | None = None,
+    metadata: dict[str, Any] | None = None,
+) -> HookContext:
     """Run before hooks for a hook point."""
     context = HookContext(
         hook_point=hook_point,
@@ -199,7 +204,11 @@ async def run_before_hooks(hook_point: HookPoint, data: dict[str, Any] | None = 
     return await hook_manager.execute_before_hooks(hook_point, context)
 
 
-async def run_after_hooks(hook_point: HookPoint, data: dict[str, Any] | None = None, metadata: dict[str, Any] | None = None) -> HookContext:
+async def run_after_hooks(
+    hook_point: HookPoint,
+    data: dict[str, Any] | None = None,
+    metadata: dict[str, Any] | None = None,
+) -> HookContext:
     """Run after hooks for a hook point."""
     context = HookContext(
         hook_point=hook_point,
@@ -209,7 +218,11 @@ async def run_after_hooks(hook_point: HookPoint, data: dict[str, Any] | None = N
     return await hook_manager.execute_after_hooks(hook_point, context)
 
 
-async def run_hooks(hook_point: HookPoint, data: dict[str, Any] | None = None, metadata: dict[str, Any] | None = None) -> HookContext:
+async def run_hooks(
+    hook_point: HookPoint,
+    data: dict[str, Any] | None = None,
+    metadata: dict[str, Any] | None = None,
+) -> HookContext:
     """Run both before and after hooks."""
     context = await run_before_hooks(hook_point, data, metadata)
     if not context.cancel:

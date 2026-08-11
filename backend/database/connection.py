@@ -3,7 +3,6 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
-from backend.config.settings import settings
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -12,6 +11,8 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.pool import NullPool
+
+from backend.config.settings import settings
 
 
 class Base(DeclarativeBase):

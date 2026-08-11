@@ -1,6 +1,5 @@
 """Status Bar API for plugins."""
 
-from typing import Any
 
 from backend.events import publish_event
 

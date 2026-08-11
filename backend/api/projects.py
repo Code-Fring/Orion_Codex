@@ -2,15 +2,17 @@
 
 from uuid import UUID
 
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, status
+from pydantic import BaseModel, Field
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from backend.agents.base import AgentContext
 from backend.core.auth.jwt import get_user_id_from_token
 from backend.database.connection import get_db_session
 from backend.models.models import Project, ProjectStatus
 from backend.router.router import task_router
 from backend.workspace.manager import workspace_manager
-from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, status
-from pydantic import BaseModel, Field
-from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 

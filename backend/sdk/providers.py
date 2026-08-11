@@ -2,8 +2,8 @@
 
 from typing import Any
 
+from backend.core.providers.interfaces import ModelCapability, ModelInfo
 from backend.core.providers.registry import provider_registry
-from backend.core.providers.interfaces import ModelCapability, ModelInfo, ChatMessage, ChatResponse
 
 
 class ProviderAPI:

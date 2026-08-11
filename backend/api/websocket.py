@@ -3,9 +3,6 @@
 import json
 from uuid import UUID
 
-from backend.core.auth.jwt import get_user_id_from_token
-from backend.database.connection import get_db_session
-from backend.models.models import Project
 from fastapi import (
     APIRouter,
     Depends,
@@ -15,6 +12,10 @@ from fastapi import (
     status,
 )
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from backend.core.auth.jwt import get_user_id_from_token
+from backend.database.connection import get_db_session
+from backend.models.models import Project
 
 router = APIRouter(prefix="/ws", tags=["websocket"])
 

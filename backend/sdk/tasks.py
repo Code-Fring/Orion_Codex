@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from backend.tasks.queue import task_queue, task_scheduler, Task, TaskPriority, TaskStatus
+from backend.tasks.queue import Task, TaskPriority, TaskStatus, task_queue, task_scheduler
 
 
 class TaskAPI:

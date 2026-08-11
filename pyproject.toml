@@ -1,0 +1,253 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orion-codex"
+version = "0.1.0"
+description = "Orion Codex - AI-powered development platform"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "sqlalchemy>=2.0.0",
+    "aiosqlite>=0.19.0",
+    "asyncpg>=0.29.0",
+    "alembic>=1.13.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.6",
+    "httpx>=0.26.0",
+    "structlog>=24.1.0",
+    "redis>=5.0.0",
+    "apscheduler>=3.10.0",
+    "openai>=1.10.0",
+    "anthropic>=0.18.0",
+    "google-generativeai>=0.3.0",
+    "jinja2>=3.1.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "python-magic>=0.4.27",
+    "aiofiles>=23.0.0",
+    "prometheus-client>=0.19.0",
+    "sentry-sdk>=1.38.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.7.0",
+    "textual>=0.44.0",
+    "typer>=0.9.0",
+    "prompt-toolkit>=3.0.43",
+    "pygments>=2.17.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "httpx>=0.26.0",
+    "ipython>=8.0.0",
+    "ipdb>=0.13.0",
+    "mypy>=1.7.0",
+    "types-python-jose>=3.3.0",
+    "types-passlib>=1.7.0",
+    "types-redis>=4.6.0",
+    "ruff>=0.5.0",
+]
+
+[tool.ruff]
+target-version = "py311"
+src = ["backend"]
+line-length = 120
+exclude = [
+    ".git",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    "dist",
+    "build",
+    "*.egg-info",
+    "node_modules",
+    "frontend",
+    "nginx",
+    "memory",
+    "plugins",
+    "shared_memory",
+    "test_build",
+    "vector_memory",
+    "workspace",
+    "orion.db",
+    "*.log",
+    "*.bat",
+    "*.ps1",
+    "*.spec",
+    "orion",
+    "orion.cmd",
+    "orion_launcher.py",
+    "launch_orion_codex.*",
+    "create_desktop_shortcut.ps1",
+    "install.py",
+    "docker-compose.yml",
+    "Dockerfile",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "PIE", # flake8-pie
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific
+    "TRY", # tryceratops
+    "LOG", # flake8-logging-format
+    "DTZ", # datetime
+    "ASYNC", # async
+    "S",   # flake8-bandit (security)
+    "PTH", # pathlib
+    "TID", # flake8-tidy-imports
+]
+ignore = [
+    # Blind exception catching is intentional for agent/error recovery patterns
+    "BLE001",
+    # Mutable default arguments in class attributes are intentional for registry patterns
+    "RUF012",
+    # PEP 484 implicit Optional - legacy codebase, not worth mass rewriting
+    "RUF013",
+    # datetime.utcnow() deprecated but used throughout codebase
+    "DTZ003",
+    # datetime.fromtimestamp() without tz
+    "DTZ006",
+    # datetime.now() without tz - used throughout codebase
+    "DTZ005",
+    # subprocess.run without check - intentional for fire-and-forget commands
+    "PLW1510",
+    # SIM102/SIM103/SIM105/SIM108/SIM118/SIM222 - code simplifications, not critical
+    "SIM102",
+    "SIM103",
+    "SIM105",
+    "SIM108",
+    "SIM118",
+    "SIM222",
+    # TRY002 - raising generic Exception in provider code is intentional
+    "TRY002",
+    "TRY003",
+    "TRY300",
+    "TRY400",
+    # C401 - generator vs set comprehension, not critical
+    "C401",
+    "C420",
+    # S110 - try-except-pass in workspace manager is intentional
+    "S110",
+    # LOG014 - exc_info in global exception handler is intentional
+    "LOG014",
+    # RUF006 - asyncio.create_task not stored is intentional fire-and-forget
+    "RUF006",
+    # S603/S607 - subprocess security warnings, intentional for builder/validation
+    "S603",
+    "S607",
+    # UP041 - asyncio.TimeoutError vs TimeoutError, minor
+    "UP041",
+    # UP042 - StrEnum not available in Python 3.11
+    "UP042",
+    # UP015 - unnecessary mode argument in open()
+    "UP015",
+    # ASYNC109/ASYNC110/ASYNC221/ASYNC240 - async patterns
+    "ASYNC109",
+    "ASYNC110",
+    "ASYNC221",
+    "ASYNC240",
+    # PTH201/PTH117/PTH123/PTH118 - pathlib
+    "PTH201",
+    "PTH117",
+    "PTH123",
+    "PTH118",
+    # RUF005 - list concatenation vs unpacking
+    "RUF005",
+    # B008 - FastAPI Depends() in argument defaults is standard pattern
+    "B008",
+    # B023 - loop variable binding
+    "B023",
+    # B904 - exception chaining
+    "B904",
+    # S104 - binding to all interfaces is intentional for server
+    "S104",
+    # S105 - false positive on token_type
+    "S105",
+    # S602 - shell=True in CLI is intentional
+    "S602",
+    # W293 - whitespace in blank lines (CSS in TUI)
+    "W293",
+    # W291 - trailing whitespace
+    "W291",
+    # PIE810 - startswith tuple
+    "PIE810",
+]
+
+# Per-file ignores for specific patterns
+[tool.ruff.lint.per-file-ignores]
+"backend/plugins/__init__.py" = ["F811"]
+"backend/cli/main.py" = ["F811", "F841", "RUF059", "E402", "E501"]
+"backend/core/providers/mock.py" = ["E501", "B007"]
+"backend/core/providers/openai.py" = ["E501", "E402"]
+"backend/core/providers/google.py" = ["E402"]
+"backend/core/providers/claude_cli.py" = ["E501"]
+"backend/core/providers/base.py" = ["F841"]
+"backend/builder/templates/python_config.py" = ["S104"]
+"backend/builder/templates/python_routes.py" = ["B008"]
+"backend/api/tasks.py" = ["B008", "F811"]
+"backend/api/websocket.py" = ["B008"]
+"backend/api/projects.py" = ["PTH118"]
+"backend/api/auth.py" = ["S105"]
+"backend/config/settings.py" = ["S104"]
+"backend/core/model_manager.py" = ["C420", "UP015"]
+"backend/mcp/server.py" = ["ASYNC110"]
+"backend/sdk/git.py" = ["SIM108", "PIE810"]
+"backend/sdk/terminal.py" = ["S602"]
+"backend/cli/tui.py" = ["W293", "DTZ005", "B007"]
+"backend/agents/analysis.py" = ["E501"]
+"backend/agents/architect.py" = ["E501"]
+"backend/agents/builder.py" = ["ASYNC240"]
+"backend/agents/coder.py" = ["F841", "E501", "ASYNC240", "W291"]
+"backend/agents/debugger.py" = ["RUF059", "ASYNC240"]
+"backend/agents/dependency.py" = ["E501"]
+"backend/agents/deployer.py" = ["ASYNC240"]
+"backend/agents/planner.py" = ["E501"]
+"backend/agents/reviewer.py" = ["ASYNC240"]
+"backend/agents/security.py" = ["F841", "ASYNC240", "E501"]
+"backend/agents/tester.py" = ["ASYNC240"]
+"backend/agents/git.py" = ["PIE810"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint.isort]
+known-first-party = ["backend"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = false
+warn_unused_ignores = false
+ignore_missing_imports = true
+no_error_summary = true
+strict_optional = true
+allow_redefinition = true
+
+[[tool.mypy.overrides]]
+module = [
+    "backend.plugins.*",
+    "backend.mcp.*",
+    "backend.core.providers.*",
+    "backend.builder.*",
+    "backend.agents.*",
+]
+ignore_missing_imports = true

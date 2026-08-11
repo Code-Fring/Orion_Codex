@@ -1,8 +1,7 @@
 """Notification API for plugins."""
 
-from typing import Any
 
-from backend.events import publish_event, EventType
+from backend.events import publish_event
 
 
 class NotificationAPI:

@@ -4,7 +4,6 @@ import uuid
 from datetime import datetime
 from enum import Enum as PyEnum
 
-from backend.database.connection import Base
 from sqlalchemy import (
     JSON,
     Boolean,
@@ -19,6 +18,8 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from backend.database.connection import Base
 
 
 class UserRole(PyEnum):

@@ -2306,7 +2306,6 @@ def plugin(
     print_banner()
 
     from backend.plugins.sdk.manager import plugin_manager
-    from backend.plugins.sdk.manifest import PluginType
 
     if list_all:
         plugins = plugin_manager.list_plugins()

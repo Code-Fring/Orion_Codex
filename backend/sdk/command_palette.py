@@ -1,6 +1,8 @@
 """Command Palette API for plugins."""
 
-from typing import Any, Callable
+import asyncio
+from collections.abc import Callable
+from typing import Any
 
 from backend.events import publish_event
 
@@ -24,7 +26,6 @@ class CommandPaletteAPI:
         self._commands[name] = handler
 
         # Publish to event bus for UI to pick up
-        import asyncio
         asyncio.create_task(publish_event("command_palette.register", {
             "project_id": self.project_id,
             "name": name,
@@ -37,7 +38,6 @@ class CommandPaletteAPI:
         """Unregister a command."""
         self._commands.pop(name, None)
 
-        import asyncio
         asyncio.create_task(publish_event("command_palette.unregister", {
             "project_id": self.project_id,
             "name": name,

@@ -1,10 +1,9 @@
 """Build API for plugins."""
 
-import asyncio
 from pathlib import Path
 from typing import Any
 
-from backend.validation.build_validator import build_validator, auto_fixer, BuildValidationReport
+from backend.validation.build_validator import BuildValidationReport, auto_fixer, build_validator
 
 
 class BuildAPI:

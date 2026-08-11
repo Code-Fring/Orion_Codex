@@ -4,15 +4,16 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import structlog
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
 from backend.api import auth, projects, providers, tasks, websocket
 from backend.config.settings import settings
 from backend.core.providers.factory import ProviderFactory
 from backend.core.providers.registry import provider_registry
 from backend.database.connection import db_manager
 from backend.tasks.queue import task_scheduler
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
 # Configure structured logging
 structlog.configure(

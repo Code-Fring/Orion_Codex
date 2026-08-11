@@ -3,9 +3,10 @@
 from datetime import datetime, timedelta
 
 import jwt
-from backend.config.settings import settings
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
+
+from backend.config.settings import settings
 
 # Use sha256_crypt instead of bcrypt to avoid passlib/bcrypt compatibility issues
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")

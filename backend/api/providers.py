@@ -2,14 +2,15 @@
 
 from uuid import UUID
 
+from fastapi import APIRouter, Depends, Header, HTTPException, status
+from pydantic import BaseModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from backend.core.auth.jwt import get_user_id_from_token
 from backend.core.providers.factory import ProviderFactory
 from backend.core.providers.registry import provider_registry
 from backend.database.connection import get_db_session
 from backend.models.models import APIKey, ProviderConfig, ProviderType
-from fastapi import APIRouter, Depends, Header, HTTPException, status
-from pydantic import BaseModel, Field
-from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/providers", tags=["providers"])
 
@@ -341,8 +342,9 @@ async def create_api_key(
     user_id: UUID = Depends(get_current_user_id),
 ):
     """Store an API key (encrypted in production)."""
-    from backend.core.auth.jwt import get_password_hash
     from sqlalchemy import select
+
+    from backend.core.auth.jwt import get_password_hash
 
     # Check if key with same name exists for this provider
     existing = await db.execute(

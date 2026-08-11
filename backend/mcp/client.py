@@ -2,16 +2,10 @@
 
 import asyncio
 import logging
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 from uuid import uuid4
 
-from backend.mcp.transports import (
-    HTTPTransport,
-    SSETransport,
-    StdioTransport,
-    StdioTransportConfig,
-    WebSocketTransport,
-)
 from backend.mcp.types import MCPTransport
 
 logger = logging.getLogger(__name__)

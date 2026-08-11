@@ -317,6 +317,7 @@ class ModelManager:
                     continue
 
                 # Score models based on capabilities
+                best_score = -1
                 for model in models:
                     score = 0
                     for cap in capabilities:

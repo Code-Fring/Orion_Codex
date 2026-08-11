@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from backend.validation.build_validator import BuildValidator, BuildValidationReport, ValidationResult
+from backend.validation.build_validator import BuildValidationReport, BuildValidator
 
 
 class ValidationAPI:

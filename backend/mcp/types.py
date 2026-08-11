@@ -92,7 +92,7 @@ class MCPMessage:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "MCPMessage":
         error = None
-        if "error" in data and data["error"]:
+        if data.get("error"):
             error = MCPError(**data["error"])
         return cls(
             jsonrpc=data.get("jsonrpc", "2.0"),

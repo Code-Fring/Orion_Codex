@@ -8,6 +8,7 @@ from abc import ABC
 from typing import Any
 
 import httpx
+
 from backend.core.providers.interfaces import (
     BaseProvider,
     ChatMessage,

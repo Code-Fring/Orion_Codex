@@ -2,6 +2,11 @@
 
 from uuid import UUID
 
+from fastapi import APIRouter, Depends, Header, HTTPException, status
+from pydantic import BaseModel, EmailStr, Field
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from backend.core.auth.jwt import (
     create_access_token,
     create_refresh_token,
@@ -12,10 +17,6 @@ from backend.core.auth.jwt import (
 )
 from backend.database.connection import get_db_session
 from backend.models.models import User, UserRole
-from fastapi import APIRouter, Depends, Header, HTTPException, status
-from pydantic import BaseModel, EmailStr, Field
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

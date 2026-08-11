@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any
 
-from backend.analysis.dependency_graph import dependency_analyzer, DependencyGraph
+from backend.analysis.dependency_graph import DependencyGraph, dependency_analyzer
 
 
 class DependencyGraphAPI:

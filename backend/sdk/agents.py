@@ -2,21 +2,23 @@
 
 from typing import Any
 
-from backend.agents.base import BaseAgent, AgentContext, AgentResult, AgentPipeline, AgentStatus
 from backend.agents import (
-    planner,
-    architect,
-    coder,
-    reviewer,
-    tester,
-    security,
-    debugger,
-    deployer,
-    git as git_agent,
-    dependency,
-    builder,
     analysis,
+    architect,
+    builder,
+    coder,
+    debugger,
+    dependency,
+    deployer,
+    planner,
+    reviewer,
+    security,
+    tester,
 )
+from backend.agents import (
+    git as git_agent,
+)
+from backend.agents.base import AgentContext, AgentPipeline, AgentResult, BaseAgent
 
 
 class AgentAPI:

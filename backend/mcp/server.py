@@ -1,27 +1,25 @@
 """MCP Server implementation for exposing Orion capabilities."""
 
 import asyncio
-import logging
 import json
+import logging
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Any, Callable
-from uuid import uuid4
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
 
+from backend.mcp.transports import MCPTransport
 from backend.mcp.types import (
+    MCPClientInfo,
     MCPError,
     MCPErrorCode,
-    MCPMessage,
+    MCPPrompt,
+    MCPPromptResult,
     MCPResource,
     MCPResourceContent,
-    MCPPrompt,
-    MCPPromptMessage,
-    MCPPromptResult,
-    MCPTool,
     MCPServerInfo,
-    MCPClientInfo,
+    MCPTool,
 )
-from backend.mcp.transports import MCPTransport
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +125,11 @@ class ResourceCapability(MCPServerCapability):
     def get_capability_definition(self) -> dict[str, Any]:
         return {"resources": {"subscribe": True, "listChanged": True}}
 
-    def register_resource(self, resource: MCPResource, handler: Callable[[str], MCPResourceContent | list[MCPResourceContent]]) -> None:
+    def register_resource(
+        self,
+        resource: MCPResource,
+        handler: Callable[[str], MCPResourceContent | list[MCPResourceContent]],
+    ) -> None:
         """Register a resource with its handler."""
         self._resources[resource.uri] = MCPResourceHandler(resource=resource, handler=handler)
 
@@ -276,12 +278,25 @@ class MCPServer:
         tool = MCPTool(name=name, description=description, input_schema=input_schema)
         self._tool_capability.register_tool(tool, handler)
 
-    def register_resource(self, uri: str, name: str, description: str | None, mime_type: str | None, handler: Callable[[str], MCPResourceContent | list[MCPResourceContent]]) -> None:
+    def register_resource(
+        self,
+        uri: str,
+        name: str,
+        description: str | None,
+        mime_type: str | None,
+        handler: Callable[[str], MCPResourceContent | list[MCPResourceContent]],
+    ) -> None:
         """Register a resource."""
         resource = MCPResource(uri=uri, name=name, description=description, mime_type=mime_type)
         self._resource_capability.register_resource(resource, handler)
 
-    def register_prompt(self, name: str, description: str, arguments: list[dict] | None, handler: Callable[[dict], MCPPromptResult]) -> None:
+    def register_prompt(
+        self,
+        name: str,
+        description: str,
+        arguments: list[dict] | None,
+        handler: Callable[[dict], MCPPromptResult],
+    ) -> None:
         """Register a prompt."""
         prompt = MCPPrompt(name=name, description=description, arguments=arguments)
         self._prompt_capability.register_prompt(prompt, handler)

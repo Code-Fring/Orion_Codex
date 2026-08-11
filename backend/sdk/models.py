@@ -1,8 +1,7 @@
 """Model API for plugins."""
 
-from typing import Any
 
-from backend.core.model_manager import model_manager, AgentRole, ModelAssignment
+from backend.core.model_manager import AgentRole, ModelAssignment, model_manager
 
 
 class ModelAPI:
@@ -15,7 +14,14 @@ class ModelAPI:
         """Get model assignment for a role."""
         return model_manager.get_assignment(role)
 
-    def assign_model(self, role: AgentRole, provider_name: str, model_id: str, temperature: float = 0.7, max_tokens: int | None = None) -> bool:
+    def assign_model(
+        self,
+        role: AgentRole,
+        provider_name: str,
+        model_id: str,
+        temperature: float = 0.7,
+        max_tokens: int | None = None,
+    ) -> bool:
         """Assign a model to a role."""
         return model_manager.assign_model(role, provider_name, model_id, temperature, max_tokens)
 

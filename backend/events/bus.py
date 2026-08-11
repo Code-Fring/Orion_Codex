@@ -2,10 +2,11 @@
 
 import asyncio
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable
+from typing import Any
 from uuid import uuid4
 
 logger = logging.getLogger(__name__)
@@ -106,7 +107,13 @@ class Event:
         }
 
     @classmethod
-    def create(cls, event_type: str | EventType, data: dict[str, Any] | None = None, source: str | None = None, correlation_id: str | None = None) -> "Event":
+    def create(
+        cls,
+        event_type: str | EventType,
+        data: dict[str, Any] | None = None,
+        source: str | None = None,
+        correlation_id: str | None = None,
+    ) -> "Event":
         if isinstance(event_type, EventType):
             event_type = event_type.value
         return cls(
@@ -303,13 +310,23 @@ event_bus = EventBus()
 
 
 # Convenience functions
-async def publish_event(event_type: str | EventType, data: dict[str, Any] | None = None, source: str | None = None, correlation_id: str | None = None) -> int:
+async def publish_event(
+    event_type: str | EventType,
+    data: dict[str, Any] | None = None,
+    source: str | None = None,
+    correlation_id: str | None = None,
+) -> int:
     """Publish an event."""
     event = Event.create(event_type, data, source, correlation_id)
     return await event_bus.publish(event)
 
 
-def subscribe_to_event(event_type: str, handler: Callable[[Event], Any], filter_fn: Callable[[Event], bool] | None = None, once: bool = False) -> EventSubscription:
+def subscribe_to_event(
+    event_type: str,
+    handler: Callable[[Event], Any],
+    filter_fn: Callable[[Event], bool] | None = None,
+    once: bool = False,
+) -> EventSubscription:
     """Subscribe to an event."""
     return event_bus.subscribe(event_type, handler, filter_fn, once)
 

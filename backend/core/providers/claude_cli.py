@@ -5,7 +5,6 @@ import json
 import subprocess
 from typing import Any
 
-from backend.core.providers.base import HTTPProviderBase
 from backend.core.providers.interfaces import (
     ChatMessage,
     ChatProvider,
@@ -87,7 +86,6 @@ class ClaudeCLIProvider(ChatProvider):
 
     async def close(self) -> None:
         """Close provider (no-op for CLI)."""
-        pass
 
     def _convert_messages(self, messages: list[ChatMessage]) -> str:
         """Convert messages to a single prompt string for CLI."""
