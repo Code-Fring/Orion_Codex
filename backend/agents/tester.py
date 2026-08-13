@@ -279,7 +279,6 @@ Generate the complete test file content now."""
                     "tests/",
                     "-v",
                     "--tb=short",
-                    "--coverage",
                 ]
             elif language in ("javascript", "typescript") and test_framework == "jest":
                 cmd = ["npx", "jest", "--verbose", "--coverage"]

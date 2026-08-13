@@ -1,6 +1,7 @@
 """Main FastAPI application for Orion Codex."""
 
 from collections.abc import AsyncGenerator
+import shutil
 from contextlib import asynccontextmanager
 
 import structlog
@@ -108,16 +109,28 @@ async def initialize_providers() -> None:
         },
     }
 
+    initialized = 0
     for provider_type, config in provider_configs.items():
         # Filter out None values
         filtered_config = {k: v for k, v in config.items() if v is not None}
+        if provider_type == "claude_cli" and not shutil.which(str(filtered_config.get("cli_path", "claude"))):
+            logger.info("Skipping Claude CLI provider; executable not found")
+            continue
         # For claude_cli, we don't need api_key
         if provider_type == "claude_cli" or filtered_config.get("api_key"):
             try:
-                await ProviderFactory.create_provider(provider_type, filtered_config)
+                provider = await ProviderFactory.create_provider(provider_type, filtered_config)
+                if provider:
+                    initialized += 1
                 logger.info(f"Initialized provider: {provider_type}")
             except Exception as e:
                 logger.warning(f"Failed to initialize provider {provider_type}: {e}")
+
+    if initialized == 0:
+        provider = await ProviderFactory.create_provider("mock", {"api_key": "local-dev-mock"}, validate=False)
+        if provider:
+            await provider_registry.refresh_models(provider.provider_name)
+            logger.info("Initialized local mock provider for development and tests")
 
 
 app = FastAPI(

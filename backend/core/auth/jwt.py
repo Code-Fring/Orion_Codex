@@ -2,8 +2,7 @@
 
 from datetime import datetime, timedelta
 
-import jwt
-from jwt.exceptions import InvalidTokenError
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from backend.config.settings import settings
@@ -59,7 +58,7 @@ def decode_token(token: str) -> dict | None:
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
         return payload
-    except InvalidTokenError:
+    except JWTError:
         return None
 
 

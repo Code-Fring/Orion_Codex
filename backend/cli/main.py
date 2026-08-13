@@ -4,6 +4,7 @@ import asyncio
 import json
 import os
 import subprocess
+import shutil
 import sys
 from datetime import datetime
 from enum import Enum
@@ -135,6 +136,8 @@ def get_provider():
         async def init_providers():
             for provider_type, config in provider_configs.items():
                 filtered_config = {k: v for k, v in config.items() if v is not None}
+                if provider_type == "claude_cli" and not shutil.which(str(filtered_config.get("cli_path", "claude"))):
+                    continue
                 if provider_type == "claude_cli" or filtered_config.get("api_key"):
                     try:
                         await ProviderFactory.create_provider(
@@ -145,6 +148,13 @@ def get_provider():
 
         run_async(init_providers())
         providers = provider_registry.get_chat_providers()
+        if not providers:
+            run_async(ProviderFactory.create_provider("mock", {"api_key": "local-dev-mock"}, validate=False))
+            provider = provider_registry.get_provider("mock")
+            if provider:
+                run_async(provider_registry.refresh_models(provider.provider_name))
+            providers = provider_registry.get_chat_providers()
+
         if not providers:
             console.print(
                 "[red]No AI providers configured. Run 'orion providers --add type:key' to set up.[/red]"
@@ -1693,6 +1703,9 @@ def providers(
     print_banner()
 
     if list:
+        _load_providers_from_config()
+        if not provider_registry.list_all_providers():
+            run_async(ProviderFactory.create_provider("mock", {"api_key": "local-dev-mock"}, validate=False))
         console.print("[bold]Available Provider Types:[/bold]")
         for ptype in ProviderFactory.get_supported_providers():
             console.print(f"  - {ptype}")
@@ -2269,10 +2282,6 @@ def tui(
         raise typer.Exit(1)
 
 
-if __name__ == "__main__":
-    app()
-
-
 # Plugin commands
 @app.command()
 def plugin(
@@ -2429,3 +2438,7 @@ def plugin_watch(
                 console.print("\n[yellow]Stopped watching[/yellow]")
         else:
             console.print("[red]Failed to start watching[/red]")
+
+
+if __name__ == "__main__":
+    app()

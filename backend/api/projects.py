@@ -338,7 +338,7 @@ async def run_generation_pipeline(project_id: str, prompt: str) -> None:
 
         context = AgentContext(
             project_id=project_id,
-            workspace_path=str(workspace_path / "source"),
+            workspace_path=str((workspace_path / "source").resolve()),
             config={"prompt": prompt},
         )
 

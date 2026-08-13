@@ -148,8 +148,30 @@ class MockProvider(ChatProvider, EmbeddingProvider):
                 else:
                     content = '{"tool": "LIST_DIR", "args": {"path": "."}}'
         else:
+            lower_system = system_message.lower()
+            if "return a json object" in lower_system and "project_type" in lower_system:
+                content = '{"project_type":"web_app","description":"Mock-generated project from request","features":["hello endpoint"],"tech_stack_preferences":{"language":"python","framework":"fastapi","database":null,"deployment":null},"constraints":[],"complexity":"simple","estimated_files":3,"key_requirements":["working app"]}'
+            elif "expert test engineer" in lower_system and "generate comprehensive tests" in lower_system:
+                content = "def test_mock_generated_app():\n    assert True\n"
+            elif "file:" in lower_system and "requirements" in lower_system:
+                if "requirements.txt" in lower_system:
+                    content = "fastapi>=0.109.0\nuvicorn[standard]>=0.27.0\n"
+                elif "readme.md" in lower_system:
+                    content = "# Mock App\n\nRun with `python -m uvicorn main:app --reload`.\n"
+                else:
+                    content = "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get('/')\ndef read_root():\n    return {'message': 'Hello from Orion Codex'}\n"
+            elif "return a json object" in lower_system and "milestones" in lower_system:
+                content = '{"project_name":"Mock App","project_type":"web_app","tech_stack":{"language":"python","framework":"fastapi","database":"sqlite"},"file_structure":{"root":["main.py","requirements.txt","README.md"]},"tasks":[{"name":"create_app","description":"Create a runnable FastAPI app","agent_type":"builder","dependencies":[],"priority":1,"estimated_duration":"10m"}],"milestones":[{"name":"Setup","tasks":["create_app"]}]}'
+            elif "system architecture" in lower_system or "observability" in lower_system:
+                content = '{"overview":"Simple FastAPI application","components":[{"name":"api","type":"backend","description":"HTTP API"}],"data_model":{"entities":[]},"api_design":{"style":"REST","endpoints":[{"method":"GET","path":"/","description":"health greeting"}]},"security":{"authentication":"none for smoke app"},"deployment":{"runtime":"uvicorn"},"observability":{"logging":"text"},"infrastructure":{"containerization":"docker"}}'
+            elif "review architecture" in lower_system or "architecture review" in lower_system:
+                content = '{"approved":true,"score":90,"issues":[],"recommendations":["Add tests as the project grows"],"summary":"Architecture is sufficient for a simple app."}'
+            elif "json" in lower_system and "issues" in lower_system and "strengths" in lower_system:
+                content = '{"score":95,"issues":[],"strengths":["Clear simple implementation"],"summary":"No issues found by mock provider."}'
+            elif "security" in lower_system and "findings" in lower_system:
+                content = '{"risk_score":0,"findings":[],"summary":"No security findings from mock provider."}'
             # Generate a contextual mock response
-            if "hello" in user_message.lower() or "hi" in user_message.lower():
+            elif "hello" in user_message.lower() or "hi" in user_message.lower():
                 content = "Hello! I'm a mock AI provider for testing Orion Codex. How can I help you today?"
             elif "code" in user_message.lower() or "program" in user_message.lower():
                 content = "I can help you with code! Here's a simple example:\n\n```python\ndef hello_world():\n    print('Hello, World!')\n\nhello_world()\n```"

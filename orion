@@ -24,6 +24,7 @@ if [ ! -d "$BACKEND_PATH" ]; then
     BACKEND_PATH=$(python3 -c "
 import sys
 import site
+import os
 for p in sys.path:
     backend = os.path.join(p, 'orion_codex', 'backend')
     if os.path.isdir(backend):
@@ -39,5 +40,5 @@ if [ ! -d "$BACKEND_PATH" ]; then
 fi
 
 # Add backend to Python path and run
-export PYTHONPATH="$BACKEND_PATH:$PYTHONPATH"
+export PYTHONPATH="$SCRIPT_DIR:$PYTHONPATH"
 exec python3 -m backend.cli.main "$@"
