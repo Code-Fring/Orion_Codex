@@ -63,6 +63,8 @@ class BuilderAgent(BaseAgent):
         file_structure = plan.get("file_structure", {})
 
         for directory, files in file_structure.items():
+            if directory == "root":
+                continue
             dir_path = workspace_path / directory
             dir_path.mkdir(parents=True, exist_ok=True)
 

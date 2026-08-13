@@ -117,15 +117,15 @@ class AgentPipeline:
                     success=False,
                     error=f"Context validation failed for agent {agent.name}",
                 )
-                self.results[agent.name] = result
+                self.results[agent.agent_type] = result
                 break
 
             await agent.pre_execute(context)
             result = await agent.execute(context)
             await agent.post_execute(result)
 
-            self.results[agent.name] = result
-            context.previous_outputs[agent.name] = result.output
+            self.results[agent.agent_type] = result
+            context.previous_outputs[agent.agent_type] = result.output
 
             if not result.success:
                 logger.error(

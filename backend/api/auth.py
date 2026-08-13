@@ -3,7 +3,7 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, HTTPException, status
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,13 +21,25 @@ from backend.models.models import User, UserRole
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-class LoginRequest(BaseModel):
-    email: EmailStr
+class EmailValidatedModel(BaseModel):
+    """Base model that validates email-shaped string fields without optional dependencies."""
+
+    @field_validator("email", check_fields=False)
+    @classmethod
+    def validate_email(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if "@" not in normalized or normalized.startswith("@") or normalized.endswith("@"):
+            raise ValueError("Invalid email address")
+        return normalized
+
+
+class LoginRequest(EmailValidatedModel):
+    email: str
     password: str = Field(..., min_length=1)
 
 
-class RegisterRequest(BaseModel):
-    email: EmailStr
+class RegisterRequest(EmailValidatedModel):
+    email: str
     password: str = Field(..., min_length=8)
     name: str = Field(..., min_length=1, max_length=255)
 

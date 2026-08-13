@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     DATABASE_ECHO: bool = False
 
     # Authentication
-    SECRET_KEY: str = Field(default="change-me-in-production", min_length=32)
+    SECRET_KEY: str = Field(default="change-me-in-production-local-dev-key", min_length=32)
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7

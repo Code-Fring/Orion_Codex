@@ -7,7 +7,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-import toml
+import tomllib
 
 from backend.agents.base import AgentContext, AgentResult, BaseAgent
 from backend.core.model_manager import AgentRole, model_manager
@@ -144,7 +144,7 @@ class DependencyManagerAgent(BaseAgent):
             pyproject = workspace_path / "pyproject.toml"
             if pyproject.exists():
                 try:
-                    data = toml.loads(pyproject.read_text())
+                    data = tomllib.loads(pyproject.read_text())
                     for dep in data.get("project", {}).get("dependencies", []):
                         match = re.match(r"^([a-zA-Z0-9_-]+)([=<>!~]+.*)?$", dep)
                         if match:

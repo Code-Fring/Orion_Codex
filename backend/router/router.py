@@ -26,21 +26,21 @@ class PipelineStage(Enum):
     """Pipeline stages."""
 
     ANALYSIS = "analysis"
-    PLANNING = "planning"
-    ARCHITECTURE = "architecture"
-    ARCHITECTURE_REVIEW = "architecture_review"
-    CODING = "coding"
+    PLANNING = "planner"
+    ARCHITECTURE = "architect"
+    ARCHITECTURE_REVIEW = "architecture_reviewer"
+    CODING = "coder"
     REFACTORING = "refactoring"
-    BUILDING = "building"
-    TESTING = "testing"
-    REVIEW = "review"
+    BUILDING = "builder"
+    TESTING = "tester"
+    REVIEW = "reviewer"
     SECURITY = "security"
     SECURITY_HARDENING = "security_hardening"
     DEPENDENCY = "dependency"
     DEBUGGING = "debugging"
     ERROR_RECOVERY = "error_recovery"
     GIT = "git"
-    DEPLOYMENT = "deployment"
+    DEPLOYMENT = "deployer"
 
 
 class TaskRouter:
@@ -236,9 +236,6 @@ class TaskRouter:
                 PipelineStage.TESTING,
                 PipelineStage.REVIEW,
                 PipelineStage.SECURITY,
-                PipelineStage.DEPENDENCY,
-                PipelineStage.GIT,
-                PipelineStage.DEPLOYMENT,
             ],
         )
 
@@ -268,8 +265,6 @@ class TaskRouter:
                 PipelineStage.SECURITY,
                 PipelineStage.SECURITY_HARDENING,
                 PipelineStage.DEPENDENCY,
-                PipelineStage.GIT,
-                PipelineStage.DEPLOYMENT,
             ],
         )
 
